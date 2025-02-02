@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        /* General Page Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2a2a72, #009ffd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Top Right Section */
+        .top-right {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Dropdown Container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropdown Button */
+        .dropbtn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dropbtn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Dropdown Content */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Show Dropdown on Hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Container with Glass Effect */
+        .container {
+            width: 340px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        /* Input Fields */
+        .input-box, .select-box {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .input-box::placeholder, .select-box {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .select-box option {
+            background: #2a2a72;
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .btn {
+            width: 48%;
+            padding: 10px;
+            background: #ff4081;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff80ab;
+            transform: scale(1.05);
+        }
+
+        .btn-manage {
+            background: #00e676;
+        }
+
+        .btn-manage:hover {
+            background: #66ffa6;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Top Right Section (Welcome Message + Settings Dropdown) -->
+    <div class="top-right">
+        <span>Welcome, {% if user_email %}{{ user_email }}{% else %}Guest{% endif %}</span>
+        <!-- Settings Dropdown -->
+        <div class="dropdown">
+            <button class="dropbtn">⚙️ Settings</button>
+            <div class="dropdown-content">
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <form action="/" method="POST">
+        <div class="container">
+            <h2>Add Your Task</h2>
+            <input class="input-box" type="text" name="task" placeholder="Enter Your Task">
+            <input class="input-box" type="number" name="hours" placeholder="Enter Hours">
+            <!-- Priority Dropdown -->
+            <select class="select-box" name="prio">
+                <option value="" disabled selected>Select Priority</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <div class="btn-container">
+                <button class="btn">ADD TASK</button>
+                <!-- Hyperlink the Manage Task button -->
+                <a href="/task" class="btn btn-manage" style="text-decoration: none;">MANAGE TASK</a>
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>
+
+

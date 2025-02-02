@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        /* Reset and General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        header .profile {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Task Table */
+        .task-table {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .task-table thead {
+            background: #4b5563;
+            color: #ffffff;
+        }
+
+        .task-table th, .task-table td {
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .task-table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .task-table tbody tr:hover {
+            background: #f3f4f6;
+        }
+
+        .task-table .label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .label.priority {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .label.secondary {
+            background: #f59e0b;
+            color: #ffffff;
+        }
+
+        .label.important {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        .label.dolater {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .actions button:hover {
+            color: #111827;
+        }
+
+        /* Floating Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MyTasks</h1>
+        <div class="profile">Hi, Welcome Back {{user_email}}</div>
+    </header>
+
+
+    {% if altodo|length==0 %}
+    <h3><b><i>NO RECORD FOUND</i></b></h3>
+
+    {%else%}
+    <table class="task-table">
+        <thead>
+            <tr>
+                <th>SRNO</th>
+                <th>Activity Name</th>
+                <th>Priority</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in altodo %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{todo.task_name}}</td>
+                <td><span class="label priority">{{todo.priority}}</span></td>
+                <td>{{todo.date}}</td>
+                <td class="actions">
+                    <button>✏️</button>
+                    <a href="/delete/{{todo.task_name}}"><button>🗑️</button></a>
+                </td>
+            </tr>
+        </tr>
+        {%endfor%}
+
+        </tbody>
+       
+    </table>
+   {%endif%}
+    <button class="floating-btn">+</button>
+</body>
+</html>
