@@ -7,8 +7,7 @@ import psycopg2
 import json
 import os,time
 
-print( os.getenv("MAIL_PASSWORD"))
-print(os.getenv("DATABASE_URL"))
+
 with open('config.json') as f:
     params=json.load(f)["params"]
 app=Flask(__name__,template_folder='template')
@@ -75,7 +74,7 @@ def send_mail_hours(hours,task_name,user_mail):
 #database connection
 def get_db_connection():
     # Get the PostgreSQL connection details from environment variables
-    db_url = os.getenv('DATABASE_URL')  # Assuming you set DATABASE_URL in Render environment variables
+    db_url ="postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a/amit_pg_db"  # Assuming you set DATABASE_URL in Render environment variables
 
     # Use psycopg2 to connect to the PostgreSQL database
     conn = psycopg2.connect(db_url)
