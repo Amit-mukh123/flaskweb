@@ -14,7 +14,7 @@ with open('config.json') as f:
 app=Flask(__name__,template_folder='template')
 bcrypt=Bcrypt(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///database.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a/amit_pg_db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -33,7 +33,7 @@ app.config['MAIL_PORT'] = 587                     # 587 (TLS) or 465 (SSL)
 app.config['MAIL_USE_TLS'] = True                 # Enable TLS
 app.config['MAIL_USE_SSL'] = False                # No SSL (Use only one: TLS or SSL)
 app.config['MAIL_USERNAME'] = "flaskmail369@gmail.com"     # Your sender email (e1)
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD") # Your sender email's app password
+app.config['MAIL_PASSWORD'] = "qpnr aqqo jijx wkss" # Your sender email's app password
 app.config['MAIL_DEFAULT_SENDER'] =  "flaskmail369@gmail.com"  # Sender Email (Optional)
 
 # 🔹 Initialize Flask-Mail
