@@ -8,12 +8,14 @@ import json
 import os,time
 
 print( os.getenv("MAIL_PASSWORD"))
-
+print(os.getenv("DATABASE_URL"))
 with open('config.json') as f:
     params=json.load(f)["params"]
 app=Flask(__name__,template_folder='template')
 bcrypt=Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI']=os.getenv("DATABASE_URL")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///database.db")
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #generate secret key for session
