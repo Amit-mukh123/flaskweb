@@ -5,8 +5,8 @@ from flask_mail import Mail,Message
 from flask_bcrypt import Bcrypt
 import psycopg2
 import json
-import os,time
-from flask_migrate import Migrate
+import time
+
 
 
 
@@ -50,7 +50,7 @@ mail = Mail(app)
 
 
 db=SQLAlchemy(app)
-migrate = Migrate(app, db)
+
 class task(db.Model):
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     task_name=db.Column(db.String[5000],nullable=False)
