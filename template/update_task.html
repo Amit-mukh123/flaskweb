@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #2a5298;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #2a5298;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1e3c72;
+        }
+
+        /* Custom Select Styling */
+        select {
+            appearance: none;
+            background: #f5f5f5;
+        }
+
+        select:focus {
+            background: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Update Task</h2>
+    <form action="/update/" method="POST">
+        <input type="text" name="newTask" value="{{ task.task_name }}" required placeholder="Task Name">
+        <select name="newPriority">
+            <option value="High" {% if task.priority == 'High' %}selected{% endif %}>🔥 High</option>
+            <option value="Medium" {% if task.priority == 'Medium' %}selected{% endif %}>⚡ Medium</option>
+            <option value="Low" {% if task.priority == 'Low' %}selected{% endif %}>✅ Low</option>
+        </select>
+        <button type="submit">Update Task</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -4,25 +4,16 @@ from datetime import datetime,timedelta
 from flask_mail import Mail,Message
 from flask_bcrypt import Bcrypt
 import psycopg2
-import json
 import time
 
 
-
-
-
-
-with open('config.json') as f:
-    params=json.load(f)["params"]
 app=Flask(__name__,template_folder='template')
 bcrypt=Bcrypt(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] ="postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
-
-
+db_url ="postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
+app.config['SQLALCHEMY_DATABASE_URI'] =db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db_url ="postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
 
 
 #generate secret key for session
@@ -82,12 +73,9 @@ def send_mail_hours(hours,task_name,user_mail):
 
 #database connection
 def get_db_connection(db_url):
-    # Get the PostgreSQL connection details from environment variables
     db_url =db_url # Assuming you set DATABASE_URL in Render environment variables
-
     # Use psycopg2 to connect to the PostgreSQL database
     conn = psycopg2.connect(db_url)
-
     return conn
 
 
@@ -117,6 +105,23 @@ def delete_task(task_name):
     db.session.delete(del_task)
     db.session.commit()
     return redirect(url_for('task_manager'))
+
+
+@app.route("/update/<int:task_id>",methods=['POST','GET'])
+def update(task_id):
+    if 'user_email' not in session['user_email']:
+        return redirect(url_for('login'))
+    
+    task_to_update=task.query.filter_by(task_id=task_id,email=session['user_email'])
+
+    if request.method=='POST':
+        new_task=request.form['newTask']
+        new_priority=request.form['newPriority']
+        task_to_update.task_name=new_task
+        task_to_update.priority=new_priority
+        db.session.commit()
+        return redirect(url_for('task_manager'))
+    return render_template("update_task.html")
 
 
 @app.route("/task")
