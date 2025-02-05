@@ -89,7 +89,8 @@
 
 <div class="form-container">
     <h2>Update Task</h2>
-    <form action="/update/" method="POST">
+    <form action="{{ url_for('update', task_id=task.task_id) }}" method="POST">
+
         <input type="text" name="newTask" value="{{ task.task_name }}" required placeholder="Task Name">
         <select name="newPriority">
             <option value="High" {% if task.priority == 'High' %}selected{% endif %}>🔥 High</option>
