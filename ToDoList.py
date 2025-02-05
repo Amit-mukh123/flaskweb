@@ -3,8 +3,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, f
 from datetime import datetime, timedelta
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
-from celery import Celery
-import os
+import os,time
 
 app = Flask(__name__, template_folder='template')
 bcrypt = Bcrypt(app)
@@ -12,7 +11,7 @@ bcrypt = Bcrypt(app)
 # Load environment variables
 db_url = "postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
 mail_password = os.getenv('MAIL_PASSWORD')
-print(db_url,mail_password)
+
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -35,13 +34,7 @@ app.config['MAIL_DEFAULT_SENDER'] = "flaskmail369@gmail.com"
 
 mail = Mail(app)
 
-# Celery Configuration
-app.config['CELERY_BROKER_URL'] = "redis://red-cuhh5nt6l47c73dqq2cg:6379"
 
-app.config['CELERY_RESULT_BACKEND'] = "redis://red-cuhh5nt6l47c73dqq2cg:6379"
-
-celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
-celery.conf.update(app.config)
 
 # Database Models
 class Task(db.Model):
@@ -59,20 +52,13 @@ class Users(db.Model):
     password = db.Column(db.String(200), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-# Celery Task for Sending Emails
-@celery.task
+#sending mails
 def send_mail_task(user_mail, user_subject, user_msg):
     with app.app_context():
         msg = Message(subject=user_subject, recipients=[user_mail], body=user_msg)
         mail.send(msg)
         print("📧 Email sent successfully to:", user_mail)
 
-def send_mail_hours(hours, task_name, user_mail):
-    if hours > 0:
-        send_mail_task.apply_async(
-            (user_mail, "Task Reminder", f"Reminder: Your task '{task_name}' is due soon!"),
-            countdown=hours 
-        )
 
 @app.route("/", methods=['GET', 'POST'])
 def add_todo():
@@ -150,6 +136,21 @@ def login():
             return redirect(url_for('add_todo'))
         flash("Invalid email or password.", "error")
     return render_template("user_login.html")
+
+@app.route("/forgot",methods=['POST','GET'])
+def forgot_password():
+    if request.method=='POST':
+        user_email=request.form['email']
+        user_password=request.form['password']
+        data=Users.query.filter_by(email=user_email).first()
+        hash_password = bcrypt.generate_password_hash(user_password).decode('utf-8')
+        data.password=hash_password
+        db.session.commit()
+        send_mail_task(user_email,"password recovery",f"your password is successfully changed.new password is: {user_password}")
+        flash("Password Changed Successfully")
+        return redirect(url_for('login'))
+
+    return render_template("forgot_password.html")
 
 @app.route("/logout")
 def logout():

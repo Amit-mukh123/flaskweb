@@ -73,15 +73,15 @@
             background: #4338ca;
         }
 
-        .toggle-link {
-            margin-top: 15px;
+        .toggle-link, .forgot-link {
+            margin-top: 10px;
             font-size: 14px;
             color: #4f46e5;
             cursor: pointer;
             display: block;
         }
 
-        .toggle-link:hover {
+        .toggle-link:hover, .forgot-link:hover {
             text-decoration: underline;
         }
 
@@ -94,21 +94,20 @@
 
     <div class="container">
         <!-- Login Form -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
         <form action="/login" method="POST" id="loginForm">
             <h2>Login</h2>
-
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
+            <span class="forgot-link" onclick="window.location.href='/forgot'">Forgot Password?</span>
             <span class="toggle-link" onclick="toggleForms()">Don't have an account? Register</span>
         </form>
 
@@ -128,14 +127,6 @@
             document.getElementById('loginForm').classList.toggle('hidden');
             document.getElementById('registerForm').classList.toggle('hidden');
         }
-
-        // Auto-hide flash messages after 3 seconds
-        setTimeout(() => {
-            document.querySelectorAll('.alert').forEach(alert => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 3000);
     </script>
 
 </body>
