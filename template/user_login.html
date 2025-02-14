@@ -166,15 +166,6 @@
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             
-            <!-- Improved Profile Image Upload -->
-            <div class="profile-container" onclick="document.getElementById('profile-pic-input').click();">
-                <img id="profile-pic" src="{{ user.profile_pic or url_for('static', filename='default.png') }}" alt="Profile Picture">
-                <div class="upload-overlay">
-                    <i class="fas fa-camera"></i>
-                </div>
-            </div>
-            <input type="file" id="profile-pic-input" name="profile_pic" accept="image/*" style="display: none;">
-            
             <button type="submit">Register</button>
             <span class="toggle-link" onclick="toggleForms()">Already have an account? Login</span>
         </form>
@@ -186,16 +177,6 @@
             document.getElementById('registerForm').classList.toggle('hidden');
         }
 
-        document.getElementById("profile-pic-input").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById("profile-pic").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
     </script>
 
 </body>

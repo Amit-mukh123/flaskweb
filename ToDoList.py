@@ -4,7 +4,9 @@ from datetime import datetime, timedelta
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
 import os, time
-from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__, template_folder='template')
 bcrypt = Bcrypt(app)
@@ -34,6 +36,15 @@ app.config['MAIL_PASSWORD'] = mail_password
 app.config['MAIL_DEFAULT_SENDER'] = "flaskmail369@gmail.com"
 
 mail = Mail(app)
+
+
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
 
 
 # Profile Picture Upload Configuration
@@ -131,7 +142,6 @@ def register():
         user_name = request.form['username']
         user_password = request.form['password']
         user_email = request.form['email']
-        profile_pic = request.files['profile_pic']
 
         if Users.query.filter_by(email=user_email).first():
             flash("Email already exists! Please log in.", "error")
@@ -139,13 +149,7 @@ def register():
 
         hash_password = bcrypt.generate_password_hash(user_password).decode('utf-8')
 
-        if profile_pic and allowed_file(profile_pic.filename):
-            filename = f"{user_email}_{int(time.time())}.{profile_pic.filename.rsplit('.', 1)[1].lower()}"
-            profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        else:
-            filename = "default.jpg"  # Set default profile pic
-
-        user = Users(username=user_name, email=user_email, password=hash_password, profile_pic=filename)
+        user = Users(username=user_name, email=user_email, password=hash_password)
         db.session.add(user)
         db.session.commit()
 
@@ -183,23 +187,23 @@ def upload_profile_pic():
         return jsonify({"success": False, "message": "No selected file"})
 
     if file and allowed_file(file.filename):
-        # **Delete old profile picture before saving new one**
+        # **Delete old Cloudinary image if exists**
         if user.profile_pic and user.profile_pic != "default.jpg":
-            old_pic_path = os.path.join(app.config['UPLOAD_FOLDER'], user.profile_pic)
-            if os.path.exists(old_pic_path):
-                os.remove(old_pic_path)
+            public_id = user.profile_pic.split("/")[-1].split(".")[0]
+            cloudinary.uploader.destroy(public_id)
 
-        # **Save new profile picture**
-        filename = secure_filename(f"{user_email}_{int(time.time())}.{file.filename.rsplit('.', 1)[1].lower()}")
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # **Upload new image to Cloudinary**
+        upload_result = cloudinary.uploader.upload(file, folder="profile_pics/")
+        cloudinary_url = upload_result['secure_url']
 
-        # Update user profile pic in DB
-        user.profile_pic = filename
+        # **Update profile picture URL in DB**
+        user.profile_pic = cloudinary_url
         db.session.commit()
 
-        return jsonify({"success": True, "message": "Profile picture updated!", "filename": filename})
-    
+        return jsonify({"success": True, "message": "Profile picture updated!", "filename": cloudinary_url})
+
     return jsonify({"success": False, "message": "Invalid file format"})
+
 
 
 
