@@ -105,12 +105,12 @@ def add_todo():
         # send_mail_hours(hours, my_task, user_email)
     return render_template('todo.html', user_email=user_email,user=user)
 
-@app.route("/delete/<string:task_name>")
-def delete_task(task_name):
+@app.route("/delete/<int:task_id>")
+def delete_task(task_id):
     if 'user_email' not in session:
         return redirect(url_for('login'))
     user_mail = session['user_email']
-    del_task = Task.query.filter_by(task_name=task_name, email=user_mail).first()
+    del_task = Task.query.filter_by(task_id=task_id, email=user_mail).first()
     if del_task:
         db.session.delete(del_task)
         db.session.commit()
