@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login & Register</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -88,20 +89,67 @@
         .hidden {
             display: none;
         }
+
+        /* Updated Profile Picture Upload */
+        .profile-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #4f46e5;
+            cursor: pointer;
+            margin: 10px auto;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .profile-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-container:hover {
+            border-color: #9333ea;
+        }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            transition: 0.3s ease-in-out;
+        }
+
+        .profile-container:hover .upload-overlay {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .upload-overlay i {
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Login Form -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
                 <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
         {% endif %}
-    {% endwith %}
+        {% endwith %}
     
+        <!-- Login Form -->
         <form action="/login" method="POST" id="loginForm">
             <h2>Login</h2>
             <input type="email" name="email" placeholder="Email" required>
@@ -112,11 +160,21 @@
         </form>
 
         <!-- Register Form -->
-        <form action="/register" method="POST" id="registerForm" class="hidden">
+        <form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data" id="registerForm" class="hidden">
             <h2>Register</h2>
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
+            
+            <!-- Improved Profile Image Upload -->
+            <div class="profile-container" onclick="document.getElementById('profile-pic-input').click();">
+                <img id="profile-pic" src="{{ user.profile_pic or url_for('static', filename='default.png') }}" alt="Profile Picture">
+                <div class="upload-overlay">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+            <input type="file" id="profile-pic-input" name="profile_pic" accept="image/*" style="display: none;">
+            
             <button type="submit">Register</button>
             <span class="toggle-link" onclick="toggleForms()">Already have an account? Login</span>
         </form>
@@ -127,8 +185,18 @@
             document.getElementById('loginForm').classList.toggle('hidden');
             document.getElementById('registerForm').classList.toggle('hidden');
         }
+
+        document.getElementById("profile-pic-input").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("profile-pic").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
 
 </body>
 </html>
-

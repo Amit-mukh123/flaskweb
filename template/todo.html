@@ -35,6 +35,15 @@
             font-weight: bold;
         }
 
+        /* Profile Picture Styling */
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
         /* Dropdown Container */
         .dropdown {
             position: relative;
@@ -161,8 +170,9 @@
 </head>
 <body>
 
-    <!-- Top Right Section (Welcome Message + Settings Dropdown) -->
+    <!-- Top Right Section (Welcome Message + Profile Picture + Settings Dropdown) -->
     <div class="top-right">
+        <a href="{{ url_for('profile') }}"><img src="{{ url_for('static', filename='profile_pics/' + user.profile_pic) }}" alt="Profile Picture" class="profile-pic"></a>
         <span>Welcome, {% if user_email %}{{ user_email }}{% else %}Guest{% endif %}</span>
         <!-- Settings Dropdown -->
         <div class="dropdown">
@@ -197,5 +207,3 @@
 
 </body>
 </html>
-
-

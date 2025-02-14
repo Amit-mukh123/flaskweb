@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* Profile Picture Section */
+        .profile-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .profile-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #4CAF50;
+            object-fit: cover;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Upload Section */
+        #uploadSection {
+            margin-top: 15px;
+            padding: 10px;
+            display: none;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome, {{ user.username }}</h2>
+
+    <!-- Profile Picture Section -->
+    <div class="profile-container">
+        <img id="profilePic" src="{{ url_for('static', filename='profile_pics/' + user.profile_pic) }}" alt="Profile Picture">
+        <br>
+        <button onclick="toggleUpload()">Change Profile Picture</button>
+    </div>
+
+    <!-- Upload Profile Picture (Initially Hidden) -->
+    <div id="uploadSection">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="profile_pic" id="profileInput" accept="image/*">
+            <br>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleUpload() {
+            document.getElementById("uploadSection").style.display = "block";
+        }
+
+        $(document).ready(function() {
+            $("#uploadForm").submit(function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: "/upload_profile_pic",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            alert("Profile picture updated!");
+                            $("#profilePic").attr("src", "/static/profile_pics/" + response.filename);
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
