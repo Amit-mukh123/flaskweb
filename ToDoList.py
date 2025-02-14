@@ -15,6 +15,9 @@ bcrypt = Bcrypt(app)
 db_url = "postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
 mail_password = os.getenv('MAIL_PASSWORD')
 print(mail_password)
+print(os.getenv("CLOUDINARY_CLOUD_NAME"))
+print(os.getenv("CLOUDINARY_API_KEY"))
+print(os.getenv("CLOUDINARY_API_SECRET"))
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
