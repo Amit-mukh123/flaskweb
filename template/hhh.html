@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Charts Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Hostel Charts</h1>
+
+        <div class="chart-container">
+            <div class="chart">
+                <h2>Hostel Distribution (Pie Chart)</h2>
+                <img src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
+            </div>
+            <div class="chart">
+                <h2>Monthly Electricity Usage (Bar Chart)</h2>
+                <img src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

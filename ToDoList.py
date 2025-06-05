@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='template')
 bcrypt = Bcrypt(app)
 
 # Load environment variables
-db_url = "postgresql://amit_pg_db_user:KGYGuoNXiIuMtnrxza67pnGDYG3GF6V3@dpg-cufpd8q3esus73e31b40-a.oregon-postgres.render.com/amit_pg_db"
+db_url="postgresql://todo_db_opr9_user:20iutfsfzTI66witxkhZZ7xFnUwikr4O@dpg-d0dg4j1r0fns7396se6g-a.oregon-postgres.render.com/todo_db_opr9"
 mail_password = os.getenv('MAIL_PASSWORD')
 print(mail_password)
 print(os.getenv("CLOUDINARY_CLOUD_NAME"))
@@ -256,4 +256,6 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True, port=8000)
