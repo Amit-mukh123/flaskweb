@@ -14,10 +14,10 @@ bcrypt = Bcrypt(app)
 # Load environment variables
 db_url="postgresql://todo_db_opr9_user:20iutfsfzTI66witxkhZZ7xFnUwikr4O@dpg-d0dg4j1r0fns7396se6g-a.oregon-postgres.render.com/todo_db_opr9"
 mail_password = os.getenv('MAIL_PASSWORD')
-print(mail_password)
-print(os.getenv("CLOUDINARY_CLOUD_NAME"))
-print(os.getenv("CLOUDINARY_API_KEY"))
-print(os.getenv("CLOUDINARY_API_SECRET"))
+# print(mail_password)
+# print(os.getenv("CLOUDINARY_CLOUD_NAME"))
+# print(os.getenv("CLOUDINARY_API_KEY"))
+# print(os.getenv("CLOUDINARY_API_SECRET"))
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
