@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='template')
 bcrypt = Bcrypt(app)
 
 # Load environment variables
-db_url="postgresql://todo_db_opr9_user:20iutfsfzTI66witxkhZZ7xFnUwikr4O@dpg-d0dg4j1r0fns7396se6g-a.oregon-postgres.render.com/todo_db_opr9"
+db_url="postgresql://todo_db_new_e0ws_user:GBFN5aHZG7zAGkIWgiqs5Ds1e1Eh1lLm@dpg-d1206eh5pdvs73c6t530-a.oregon-postgres.render.com/todo_db_new_e0ws"
 mail_password = os.getenv('MAIL_PASSWORD')
 # print(mail_password)
 # print(os.getenv("CLOUDINARY_CLOUD_NAME"))
